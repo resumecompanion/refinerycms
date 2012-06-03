@@ -4,6 +4,7 @@ gemspec
 
 # Add i18n support.
 # gem 'refinerycms-i18n', '~> 2.1.0.dev', github: 'parndt/refinerycms-i18n'
+# gem 'routing-filter', path: '../routing-filter'
 
 # Fixes uniqueness constraint on translated columns.
 # See: https://github.com/svenfuchs/globalize3/pull/121
@@ -33,10 +34,14 @@ end
 gem 'jruby-openssl', platform: :jruby
 
 group :development, :test do
-  gem 'refinerycms-testing', '~> 2.1.0.dev'
+  gem 'refinerycms-testing', path: '.'
+end
+
+group :test do
   gem 'generator_spec', '>= 0.8.5', github: 'stevehodgkiss/generator_spec'
   gem 'guard-rspec', '~> 0.7.0'
   gem 'fuubar', '~> 1.0.0'
+  gem 'launchy'
 
   platforms :mswin, :mingw do
     gem 'win32console', '~> 1.3.0'
