@@ -63,6 +63,29 @@ module Refinery
           localized_attributes.inject([]) {|memo, attr| memo << ":#{attr.name} => :#{attr.type}"}.join(', ')
         end
 
+        def string_attributes
+          @string_attributes ||= attributes.select {|a| /string|text/ === a.type.to_s}.uniq
+        end
+
+        def image_attributes
+          @image_attributes ||= attributes.select { |a| a.type == :image }.uniq     
+        end
+
+        def resource_attributes
+          @resource_attributes ||= attributes.select { |a| a.type == :resource }.uniq         
+        end
+
+        def names_for_attr_accessible
+          @attributes_for_attr_accessible ||= attributes.map do |a| 
+            case a.type
+            when :image, :resource
+              "#{a.name}_id" unless a.name[-3..-1] == "_id"
+            else
+              a.name
+            end
+          end
+        end
+
       protected
 
         def append_extension_to_gemfile!
@@ -139,7 +162,12 @@ module Refinery
             reject_template?(f)
           }.sort.each do |path|
             if (template_path = extension_path_for(path, extension_name)).present?
-              next if path.to_s =~ /seeds.rb/
+              next if path.to_s =~ /seeds.rb.erb/ 
+              
+              unless path.to_s =~ /views/
+                template_path = template_path.to_s.sub(".erb", "")
+              end
+
               template path, template_path
             end
           end
@@ -211,8 +239,8 @@ module Refinery
         end
 
         def copy_or_merge_seeds!
-          source_seed_file      = source_pathname.join("db/seeds.rb")
-          destination_seed_file = destination_pathname.join(extension_path_for(source_seed_file, extension_name))
+          source_seed_file      = source_pathname.join("db/seeds.rb.erb")
+          destination_seed_file = destination_pathname.join(extension_path_for(source_seed_file.to_s.sub(".erb", ""), extension_name))
 
           if existing_extension?
             # create temp seeds file

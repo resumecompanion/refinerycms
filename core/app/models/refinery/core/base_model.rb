@@ -1,4 +1,5 @@
 require 'orm_adapter'
+require 'active_record'
 
 module Refinery
   module Core
