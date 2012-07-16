@@ -52,7 +52,8 @@ module Refinery
     end
 
     def after_sign_out_path_for(resource_or_scope)
-      refinery.root_path
+      #refinery.root_path
+      "/"
     end
 
     def refinery_user?
