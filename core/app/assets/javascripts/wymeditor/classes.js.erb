@@ -1263,7 +1263,7 @@ WYMeditor.XhtmlSaxListener.prototype.closeUnopenedTag = function(tag)
 
 WYMeditor.XhtmlSaxListener.prototype.avoidStylingTagsAndAttributes = function()
 {
-  this.avoided_tags = ['div','span'];
+  this.avoided_tags = ['div','span', 'u'];
   this.validator.skipped_attributes = ['style'];
   this.validator.skipped_attribute_values = ['MsoNormal','main1']; // MS Word attributes for class
   this._avoiding_tags_implicitly = true;
