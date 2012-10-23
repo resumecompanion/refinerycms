@@ -165,9 +165,7 @@ module Refinery
           # It will be ordered based on the conditions specified into crudify
           # And eager loading is applied as specified into crudify.
           def find_all_#{plural_name}(conditions = #{options[:conditions].inspect})
-            @#{plural_name} = #{class_name}.where(conditions).includes(
-                                #{options[:include].map(&:to_sym).inspect}
-                              ).order("#{options[:order]}")
+            @#{plural_name} = #{class_name}.where(conditions).order("#{options[:order]}")
           end
 
           # Paginate a set of @#{plural_name} that may/may not already exist.
