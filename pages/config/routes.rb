@@ -11,6 +11,7 @@ Refinery::Core::Engine.routes.draw do
     delete 'pages/*path', :to => 'pages#destroy'
     resources :pages, :except => :show do
       post :update_positions, :on => :collection
+      get :child_selector, :on => :collection
     end
 
     resources :pages_dialogs, :only => [] do

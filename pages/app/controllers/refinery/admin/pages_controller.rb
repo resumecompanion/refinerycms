@@ -27,6 +27,12 @@ module Refinery
         render :layout => false
       end
 
+      def child_selector
+        @depth = params[:depth].to_i + 1
+        @pages = Refinery::Page.where(:parent_id => params[:parent_id], :depth => @depth)
+        render :layout => false
+      end
+
     protected
 
       def find_page

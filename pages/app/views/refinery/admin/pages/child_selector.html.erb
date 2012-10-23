@@ -1,0 +1,7 @@
+<% if @pages.size > 0 %>
+  <div>
+    <span class="deep-title">Depth <%= @depth %>：</span>
+    <%= select_tag :parent_id, options_from_collection_for_select(@pages, :id, :title), :include_blank => true, :class => "parent-id-selector", :id => "depth-#{@depth}", :data => {:depth => @depth} %>
+  </div>
+<% end %>
+

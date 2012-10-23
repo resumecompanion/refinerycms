@@ -58,6 +58,38 @@
         });
         e.preventDefault();
       });
+
+      $(document).on("change", ".parent-id-selector", function(){
+        var depth = $(this).attr("data-depth");
+        var value = $(this).val();
+
+        $("#loading-image").show();
+
+        $(".parent-id-selector").each(function(){
+          var child_depth = $(this).attr("data-depth");
+          var child_value = $(this).val();
+
+          if(depth < child_depth){
+            $(this).parent().remove();
+          }
+        });
+
+        if(value != ""){
+          $("#hidden-parent-id").val(value);
+          $.get("/resume/refinery/pages/child_selector?parent_id=" + value + "&depth=" + depth , function(data){
+            $(".parent-id-selector").last().parent().after(data);
+            $("#loading-image").hide();
+          });
+        }else{
+          var $active_selector = $(this).parent().prev().find(".parent-id-selector");
+          if($active_selector.length > 0){
+            $("#hidden-parent-id").val($active_selector.val());
+          }else{
+            $("#hidden-parent-id").val("");
+          }
+          $("#loading-image").hide();
+        }
+      });
     });
   </script>
 <% end %>

@@ -18,7 +18,35 @@
         <%= f.label :parent_id, t('.parent_page') %>
         <%= refinery_help_tag t('.parent_page_help') %>
       </span>
-      <%= f.select :parent_id, parent_id_nested_set_options(@page), :include_blank => true %>
+      <%#= f.select :parent_id, parent_id_nested_set_options(@page), :include_blank => true %>
+      <% if f.object.new_record? || f.object.parent_id.blank? %>
+        <div>
+          <span class="deep-title">Depth 0：</span>
+          <%= select_tag :parent_id, options_from_collection_for_select(Refinery::Page.select(:id).where(:depth => 0), :id, :title), :include_blank => true, :class => "parent-id-selector", :id => "depth-0", :data => {:depth => 0} %>
+        </div>
+      <% else %>
+        <% parent_id = f.object.parent_id %>
+        <% parent_pages = [] %>
+        <% i = 0 %>
+        <% while(i < 10) %>
+          <% parent_pages[i] = (i == 0) ? Refinery::Page.select("id, parent_id").find(parent_id) : Refinery::Page.select("id, parent_id").find(parent_pages[i-1].parent_id) rescue nil %>
+          <% parent_pages[i].present? ? i += 1 : break %>
+        <% end %>
+
+        <% parent_pages.compact.reverse.each_with_index do |parent_page, i| %>
+          <div>
+            <span class="deep-title">Depth <%= i %>：</span>
+            <% if i == 0 %>
+              <% select_options = options_from_collection_for_select(Refinery::Page.select(:id).where(:depth => 0), :id, :title, parent_page.id) %>
+            <% else %>
+              <% select_options = options_from_collection_for_select(Refinery::Page.select(:id).where(:parent_id => parent_page.parent_id), :id, :title, parent_page.id) %>
+            <% end %>
+            <%= select_tag :parent_id, select_options, :include_blank => true, :class => "parent-id-selector", :id => "depth-#{i}", :data => {:depth => i} %>
+          </div>
+        <% end %>
+      <% end %>
+      <%= refinery_icon_tag("ajax-loader.gif", :style => "display:none", :id => "loading-image") %>
+      <%= f.hidden_field :parent_id, :id => "hidden-parent-id" %>
     </div>
     <% if Refinery::Pages.use_layout_templates %>
     <div class='field'>
