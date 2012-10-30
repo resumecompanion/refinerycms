@@ -22,7 +22,7 @@
       <% if f.object.new_record? || f.object.parent_id.blank? %>
         <div>
           <span class="deep-title">Depth 0：</span>
-          <%= select_tag :parent_id, options_from_collection_for_select(Refinery::Page.select(:id).where(:depth => 0), :id, :title), :include_blank => true, :class => "parent-id-selector", :id => "depth-0", :data => {:depth => 0} %>
+          <%= select_tag :parent_id, options_from_collection_for_select(Refinery::Page.select(:id).where(:depth => 0), :id, :title), :include_blank => true, :class => "parent-id-selector", :id => "depth-0", :data => {:depth => 0}, :style => "width:350px;" %>
         </div>
       <% else %>
         <% parent_id = f.object.parent_id %>
