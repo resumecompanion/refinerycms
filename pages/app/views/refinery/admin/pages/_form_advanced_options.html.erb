@@ -41,7 +41,7 @@
             <% else %>
               <% select_options = options_from_collection_for_select(Refinery::Page.select(:id).where(:parent_id => parent_page.parent_id), :id, :title, parent_page.id) %>
             <% end %>
-            <%= select_tag :parent_id, select_options, :include_blank => true, :class => "parent-id-selector", :id => "depth-#{i}", :data => {:depth => i} %>
+            <%= select_tag :parent_id, select_options, :include_blank => true, :class => "parent-id-selector", :id => "depth-#{i}", :data => {:depth => i}, :style => "width:350px;" %>
           </div>
         <% end %>
       <% end %>
