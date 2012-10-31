@@ -4,10 +4,11 @@ module Refinery
     # This is used to display the title of the current object (normally a page) in the browser's titlebar.
     #
     def browser_title(yield_title=nil)
+      title = @meta.browser_title.present? ? @meta.browser_title : @meta.path
       [
         (yield_title if yield_title.present?),
-        @meta.browser_title.present? ? @meta.browser_title : @meta.path,
-        Refinery::Core.site_name
+        title,
+        (Refinery::Core.site_name if title.blank? || title == "Home")
       ].compact.join(" - ")
     end
 
